@@ -18,14 +18,16 @@ export default async function middleware(req: NextRequest) {
   const url = req.nextUrl;
 
   // Get hostname of request (e.g. demo.vercel.pub, demo.localhost:3000)
-  const hostname = req.headers.get("host") || "demo.vercel.pub";
+  const hostname = req.headers.get("host") || "demo.luansweb.xyz";
+  console.log("hostname", hostname)
 
   // Get the pathname of the request (e.g. /, /about, /blog/first-post)
   const path = url.pathname;
+  console.log("path", path) // app.localhost:3000/login
 
   // Only for demo purposes - remove this if you want to use your root domain as the landing page
-  if (hostname === "vercel.pub" || hostname === "platforms.vercel.app") {
-    return NextResponse.redirect("https://demo.vercel.pub");
+  if (hostname === "luansweb.xyz" || hostname === "platforms.vercel.app") {
+    return NextResponse.redirect("https://demo.luansweb.xyz");
   }
 
   /*  You have to replace ".vercel.pub" with your own domain if you deploy this example under your domain.
@@ -35,9 +37,11 @@ export default async function middleware(req: NextRequest) {
   const currentHost =
     process.env.NODE_ENV === "production" && process.env.VERCEL === "1"
       ? hostname
-          .replace(`.vercel.pub`, "")
+          .replace(`.luansweb.xyz`, "")
           .replace(`.platformize.vercel.app`, "")
       : hostname.replace(`.localhost:3000`, "");
+
+  console.log("currentHost", currentHost)
 
   // rewrites for app pages
   if (currentHost == "app") {
@@ -47,10 +51,12 @@ export default async function middleware(req: NextRequest) {
         req.cookies.get("__Secure-next-auth.session-token"))
     ) {
       url.pathname = "/";
+      console.log("# if app", url)
       return NextResponse.redirect(url);
     }
 
     url.pathname = `/app${url.pathname}`;
+    console.log(url)
     return NextResponse.rewrite(url);
   }
 
