@@ -28,9 +28,8 @@ export default async function middleware(req: NextRequest) {
   // Only for demo purposes - remove this if you want to use your root domain as the landing page
 
   if (hostname === "luansweb.xyz" || hostname === "platforms.vercel.app") {
-    return NextResponse.redirect("https://demo.luansweb.xyz");
+    return NextResponse.redirect("https://home.luansweb.xyz");
   }
-
   
   /*  You have to replace ".vercel.pub" with your own domain if you deploy this example under your domain.
       You can also use wildcard subdomains on .vercel.app links that are associated with your Vercel team slug
@@ -46,7 +45,7 @@ export default async function middleware(req: NextRequest) {
   console.log("currentHost", currentHost)
 
   // rewrites for app pages
-  if (currentHost == "app") {
+  if (currentHost == "home") {
     if (
       url.pathname === "/login" &&
       (req.cookies.get("next-auth.session-token") ||
@@ -57,15 +56,17 @@ export default async function middleware(req: NextRequest) {
       return NextResponse.redirect(url);
     }
 
-    url.pathname = `/app${url.pathname}`;
+    url.pathname = `/home${url.pathname}`;
     console.log(url)
     return NextResponse.rewrite(url);
   }
 
   // rewrite root application to `/home` folder
+  /*
   if (hostname === "localhost:3000" || hostname === "platformize.vercel.app") {
     return NextResponse.rewrite(new URL(`/home${path}`, req.url));
   }
+  */
 
   // rewrite everything else to `/_sites/[site] dynamic route
   return NextResponse.rewrite(
